@@ -85,7 +85,7 @@ export default function Expenses() {
   const handleExport = async () => {
     setExporting(true);
     try {
-      await api.download('/export/expenses.xlsx', 'harajatlar.xlsx');
+      await api.download(`/export/expenses.xlsx${queryString}`, 'harajatlar.xlsx');
       toast.success('Excel fayl yuklandi.');
     } catch (err) {
       toast.error(err.message);
@@ -112,9 +112,12 @@ export default function Expenses() {
       <div className="page-header">
         <div>
           <div className="page-title">Harajatlar</div>
-          <div className="page-subtitle">Jami harajat: {money(total)}</div>
+          <div className="page-subtitle">
+            {expenses.length} ta yozuv · Jami harajat: {money(total)}
+          </div>
         </div>
         <div className="flex gap-2">
+          <DateRangePicker value={range} onChange={setRange} />
           <button className="btn btn-secondary" onClick={handleExport} disabled={exporting}>
             <IconDownload size={16} />
             {exporting ? 'Tayyorlanmoqda...' : 'Excel'}
@@ -134,7 +137,9 @@ export default function Expenses() {
         ) : expenses.length === 0 ? (
           <div className="empty-state">
             <IconWallet size={28} />
-            <div style={{ marginTop: 8 }}>Hali harajatlar yo'q</div>
+            <div style={{ marginTop: 8 }}>
+              {range.from || range.to ? "Tanlangan sanalarda harajat yo'q" : "Hali harajatlar yo'q"}
+            </div>
           </div>
         ) : (
           <div className="table-wrap">

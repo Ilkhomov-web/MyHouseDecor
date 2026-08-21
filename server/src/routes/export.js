@@ -4,6 +4,7 @@ import { db } from '../db/index.js';
 import { requireAuth } from '../middleware/auth.js';
 import { asyncHandler } from '../middleware/errorHandler.js';
 import { buildSalesFilter } from './salesFilter.js';
+import { buildExpenseFilter } from './expenseFilter.js';
 
 const router = Router();
 router.use(requireAuth);
@@ -192,7 +193,10 @@ router.get(
     const usdRate = Number(getSetting('usd_rate', '12800')) || 12800;
     const { fmt, convert } = moneyFormat(currency, usdRate);
 
-    const rows = db.prepare('SELECT * FROM expenses ORDER BY expense_date DESC, id DESC').all();
+    const { where, params } = buildExpenseFilter(req.query);
+    const rows = db
+      .prepare(`SELECT * FROM expenses ${where} ORDER BY expense_date DESC, id DESC`)
+      .all(...params);
 
     const wb = new ExcelJS.Workbook();
     wb.creator = 'My House decor';

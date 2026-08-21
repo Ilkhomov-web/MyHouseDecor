@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { db } from '../db/index.js';
 import { requireAuth, requireRole } from '../middleware/auth.js';
 import { asyncHandler } from '../middleware/errorHandler.js';
+import { buildExpenseFilter } from './expenseFilter.js';
 
 const router = Router();
 router.use(requireAuth);
@@ -22,7 +23,10 @@ const expenseSchema = z.object({
 router.get(
   '/',
   asyncHandler((req, res) => {
-    const rows = db.prepare('SELECT * FROM expenses ORDER BY expense_date DESC, id DESC').all();
+    const { where, params } = buildExpenseFilter(req.query);
+    const rows = db
+      .prepare(`SELECT * FROM expenses ${where} ORDER BY expense_date DESC, id DESC`)
+      .all(...params);
     res.json(rows);
   })
 );

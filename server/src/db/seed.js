@@ -2,6 +2,18 @@ import 'dotenv/config';
 import bcrypt from 'bcryptjs';
 import { db } from './index.js';
 
+// Demo carpets, fake sales and the well-known admin/admin123 account belong in
+// development only. Running this against a live shop would both pollute the
+// owner's reports and open a publicly guessable login, so production refuses
+// outright instead of relying on anyone remembering not to type the command.
+if (process.env.NODE_ENV === 'production') {
+  console.error(
+    "\nXato: seed (demo ma'lumotlar) production'da ishlamaydi.\n" +
+      'Toza do\'kon uchun: npm run setup -- <login> <parol> "<To\'liq ism>"\n'
+  );
+  process.exit(1);
+}
+
 const hasUsers = db.prepare('SELECT COUNT(*) AS c FROM users').get().c;
 const hasProducts = db.prepare('SELECT COUNT(*) AS c FROM products').get().c;
 

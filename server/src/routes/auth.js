@@ -30,9 +30,30 @@ if (process.env.NODE_ENV === 'production' && !COOKIE_SECURE) {
   );
 }
 
+/**
+ * `lax` is right when the API and the UI share an origin, but a split
+ * deployment (UI on Vercel, API on Railway) is cross-site: the browser then
+ * refuses to attach a `lax` cookie to the XHR, login returns 200 and the user
+ * still bounces back to the login screen. Such a setup needs `none`, which the
+ * browser only honours together with `Secure`.
+ *
+ * So the default follows the transport — HTTPS deployments get `none`, LAN
+ * installs keep `lax` — and COOKIE_SAMESITE can override it.
+ */
+function resolveSameSite() {
+  const requested = (process.env.COOKIE_SAMESITE || (COOKIE_SECURE ? 'none' : 'lax')).toLowerCase();
+  if (requested === 'none' && !COOKIE_SECURE) {
+    console.warn(
+      '[xavfsizlik] COOKIE_SAMESITE=none faqat COOKIE_SECURE=true bilan ishlaydi — "lax" ga qaytarildi.'
+    );
+    return 'lax';
+  }
+  return requested;
+}
+
 const COOKIE_OPTS = {
   httpOnly: true,
-  sameSite: 'lax',
+  sameSite: resolveSameSite(),
   secure: COOKIE_SECURE,
   maxAge: 7 * 24 * 60 * 60 * 1000,
 };

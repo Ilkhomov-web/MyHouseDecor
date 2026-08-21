@@ -60,7 +60,7 @@ export default function Login() {
               id="username"
               className="input"
               autoComplete="username"
-              placeholder="masalan: admin"
+              placeholder="Loginingiz"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               autoFocus

@@ -17,6 +17,40 @@ import { notFoundHandler, errorHandler } from './middleware/errorHandler.js';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CLIENT_DIST = path.resolve(__dirname, '../../client/dist');
 
+const stripSlash = (s) => s.trim().replace(/\/+$/, '');
+
+/**
+ * CORS origin checker.
+ *
+ * CLIENT_ORIGIN holds a comma-separated list because a Vercel project has more
+ * than one hostname: the production domain plus a fresh one for every preview
+ * deployment. An entry may start with `*.` to cover those previews, e.g.
+ * `https://*.vercel.app`.
+ *
+ * Rejection returns "no CORS headers" rather than an error — throwing here
+ * would turn a blocked origin into a 500 in the server log.
+ */
+function originAllowList() {
+  const patterns = (process.env.CLIENT_ORIGIN || 'http://localhost:5173')
+    .split(',')
+    .map(stripSlash)
+    .filter(Boolean);
+
+  const matches = (origin) =>
+    patterns.some((p) => {
+      if (!p.includes('*')) return p === origin;
+      const [scheme, host] = p.split('://');
+      const suffix = host.replace(/^\*/, '');
+      return origin.startsWith(`${scheme}://`) && origin.endsWith(suffix);
+    });
+
+  return (origin, cb) => {
+    // Same-origin requests, curl and health checks carry no Origin header.
+    if (!origin) return cb(null, true);
+    return cb(null, matches(stripSlash(origin)));
+  };
+}
+
 export function createApp() {
   const app = express();
 
@@ -27,12 +61,7 @@ export function createApp() {
     app.set('trust proxy', 1);
   }
 
-  app.use(
-    cors({
-      origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173',
-      credentials: true,
-    })
-  );
+  app.use(cors({ origin: originAllowList(), credentials: true }));
   app.use(express.json());
   app.use(cookieParser());
 

@@ -1,6 +1,9 @@
 import 'dotenv/config';
 import { createApp } from './app.js';
 import { db } from './db/index.js';
+import { bootstrapAdmin } from './db/bootstrap.js';
+
+bootstrapAdmin();
 
 const app = createApp();
 const port = process.env.PORT || 4000;

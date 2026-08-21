@@ -1,0 +1,89 @@
+:root {
+  /* Dark theme (default) */
+  --bg: oklch(19% 0.012 280);
+  --surface: oklch(24% 0.015 280);
+  --surface-2: oklch(29% 0.017 280);
+  --border: oklch(34% 0.017 280);
+  --text: oklch(94% 0.006 280);
+  --text-muted: oklch(67% 0.013 280);
+
+  --accent: oklch(74% 0.15 280);
+  --accent-hover: oklch(80% 0.13 280);
+  --accent-soft: oklch(32% 0.06 280);
+  --accent-on: oklch(15% 0.01 280);
+
+  --positive: oklch(72% 0.14 150);
+  --positive-soft: oklch(29% 0.06 150);
+  --negative: oklch(72% 0.16 25);
+  --negative-soft: oklch(29% 0.06 25);
+
+  --shadow-sm: 0 1px 2px oklch(0% 0 0 / 0.35);
+  --shadow-md: 0 8px 24px oklch(0% 0 0 / 0.45);
+  --shadow-lg: 0 16px 40px oklch(0% 0 0 / 0.5);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --space-1: 3px;
+  --space-2: 6px;
+  --space-3: 10px;
+  --space-4: 12px;
+  --space-5: 16px;
+  --space-6: 20px;
+  --space-7: 32px;
+
+  --sidebar-w: 224px;
+  --topbar-h: 56px;
+}
+
+:root[data-theme='light'] {
+  --bg: oklch(97% 0.004 280);
+  --surface: oklch(99% 0.002 280);
+  --surface-2: oklch(96% 0.006 280);
+  --border: oklch(89% 0.007 280);
+  --text: oklch(22% 0.015 280);
+  --text-muted: oklch(52% 0.012 280);
+
+  --accent: oklch(58% 0.19 280);
+  --accent-hover: oklch(51% 0.19 280);
+  --accent-soft: oklch(93% 0.04 280);
+  --accent-on: oklch(99% 0.004 280);
+
+  --positive: oklch(52% 0.13 150);
+  --positive-soft: oklch(93% 0.05 150);
+  --negative: oklch(55% 0.19 25);
+  --negative-soft: oklch(93% 0.05 25);
+
+  --shadow-sm: 0 1px 2px oklch(0% 0 0 / 0.06);
+  --shadow-md: 0 8px 24px oklch(0% 0 0 / 0.08);
+  --shadow-lg: 0 16px 40px oklch(0% 0 0 / 0.12);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) {
+    --bg: oklch(97% 0.004 280);
+    --surface: oklch(99% 0.002 280);
+    --surface-2: oklch(96% 0.006 280);
+    --border: oklch(89% 0.007 280);
+    --text: oklch(22% 0.015 280);
+    --text-muted: oklch(52% 0.012 280);
+
+    --accent: oklch(58% 0.19 280);
+    --accent-hover: oklch(51% 0.19 280);
+    --accent-soft: oklch(93% 0.04 280);
+    --accent-on: oklch(99% 0.004 280);
+
+    --positive: oklch(52% 0.13 150);
+    --positive-soft: oklch(93% 0.05 150);
+    --negative: oklch(55% 0.19 25);
+    --negative-soft: oklch(93% 0.05 25);
+
+    --shadow-sm: 0 1px 2px oklch(0% 0 0 / 0.06);
+    --shadow-md: 0 8px 24px oklch(0% 0 0 / 0.08);
+    --shadow-lg: 0 16px 40px oklch(0% 0 0 / 0.12);
+  }
+}
